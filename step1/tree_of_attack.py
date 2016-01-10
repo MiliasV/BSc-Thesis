@@ -11,6 +11,7 @@ from collections import deque
 from pprint import pprint
 
 #Author: Vasileios Milias
+#
 
 def readmyfile(myfile):
     #reads file in format: fromAs|toAs|{0,-1}
