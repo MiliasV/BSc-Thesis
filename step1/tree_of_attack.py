@@ -11,8 +11,6 @@ from collections import deque
 from pprint import pprint
 
 #Author: Vasileios Milias
-#
-
 def readmyfile(myfile):
     #reads file in format: fromAs|toAs|{0,-1}
     #OUTPUT L:
@@ -147,7 +145,7 @@ def bfs_as_relationships(G,victim,mh):
         cur=0
         for i in range(len(path)-1):
             L.append(G[path[i]][path[i+1]]["weight"])
-            print L
+        print L
     if len(mh)==len(paths):
         print "All paths exist"
     else:
@@ -170,8 +168,8 @@ if __name__=='__main__':
     wList = convertToWeightedEdgeList(intL)
     G=nx.DiGraph()
     G.add_weighted_edges_from(wList)
-    as_graph =( bfs_as_relationships(G,13005 ,
-                                    [6453,14, 701,209, 6730, 10026,
+    as_graph =( bfs_as_relationships(G,174,
+                                    [6453, 701,209, 6730, 10026,
                                     1239, 1267, 1916, 2497, 3209, 
                                     196615, 5412, 3320, 3340, 42, 
                                     3357]) )
