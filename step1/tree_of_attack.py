@@ -116,7 +116,7 @@ def bfs_as_relationships(G,victim,mh):
 
                     if (
                             ( 
-                              ( (G[path[len(path)-2]][path[len(path)-1]]["weight"]==1) and ( (G[vertex][next]["weight"]==(1 or 0)) )) or
+                              ( (G[path[len(path)-2]][path[len(path)-1]]["weight"]==1) and ( (G[vertex][next]["weight"]==(1)) )) or
                               ( (G[path[len(path)-2]][path[len(path)-1]]["weight"]==0) and ( (G[vertex][next]["weight"]==(2 or 0)) )) or
                               ( (G[path[len(path)-2]][path[len(path)-1]]["weight"]==2) and G[vertex][next]["weight"]==2 )  
                             )  and
@@ -142,7 +142,6 @@ def bfs_as_relationships(G,victim,mh):
     
     for path in paths:
         L=[]
-        cur=0
         for i in range(len(path)-1):
             L.append(G[path[i]][path[i+1]]["weight"])
         print L
@@ -151,6 +150,13 @@ def bfs_as_relationships(G,victim,mh):
     else:
         print "%s paths don't exist" %(len(mh)-len(paths))
     return paths
+
+def from_paths_to_graph(G,paths):
+    Gp=nx.DiGraph()
+    for path in paths:
+        for i in range(len(path)-1):
+            Gp.add_edge(path[i],path[i+1],weight=G[path[i]][path[i+1]]["weight"])
+    return Gp
 
 
 if __name__=='__main__':
@@ -168,11 +174,24 @@ if __name__=='__main__':
     wList = convertToWeightedEdgeList(intL)
     G=nx.DiGraph()
     G.add_weighted_edges_from(wList)
-    as_graph =( bfs_as_relationships(G,174,
+    as_paths =( bfs_as_relationships(G,174,
                                     [6453, 701,209, 6730, 10026,
                                     1239, 1267, 1916, 2497, 3209, 
                                     196615, 5412, 3320, 3340, 42, 
                                     3357]) )
     
-    print as_graph 
+    
+    print as_paths                            
+    Gtree=from_paths_to_graph(G,as_paths)
+    pos=nx.circular_layout(Gtree)
+    nx.draw(Gtree,pos)
+    nx.draw_networkx_labels(Gtree,pos)
+    plt.show()
+    print "######################################"
+    print Gtree.edges(data=True)
+    print "#####################################"
+    print  Gtree.edges()
+    print "#####################################"
+    print Gtree.nodes()
+    print nx.is_directed_acyclic_graph(Gtree) 
     print time.time()-start_time
