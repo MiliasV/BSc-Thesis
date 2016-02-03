@@ -14,7 +14,7 @@ from pprint import pprint
 #Author: Vasileios Milias
 
 #nodes_per_Vm
-nPv=10
+nPv=5
 
 def readmyfile(myfile):
     with open(myfile,"r") as f:
@@ -44,21 +44,40 @@ def from_paths_to_graph(G,paths):
     return Gp
 
 
-def list_of_vms(paths):
+def list_of_vms(G,paths):
     #nodes that have been already placed into a Vm
-    nodes=[] 
-    
-    while paths:
-        l=[]
-        count=0
-        while count<nPv:    
-            flag=1
+    vms=[] 
+    #as_to_vm_dict
+    aTv={}
+    #the number of vm that we are
+    vm=0
+    vm+=1
+    l=[]
+    count=0
+    #no point of this
+    flag=1
+    for path in paths:
+        if len(path)>=2 and path[0] not in aTv and path[1] not in aTv:
+            l.append((path[0],path[1],0))
+            aTv[path[0]]=vm
+            aTv[path[1]]=vm
+            count+=2
+            path.pop(0)
+            if len(path)>=2: 
+                for node in path:
+                    if count>=nPv:
+                        break
+                    elif path[1] not in aTv:
+                        l.append((path[0],path[1],0))
+                        aTv[path[1]]=vm
+                        count+=1
+    """
             paths= [x for x in paths if x != []]
             if paths==[]:
                 break
             new=paths[0].pop(0)
             #print paths
-            for lists in nodes:
+            for lists in vms:
                 if new in lists:
                     flag=0
             if new in l:
@@ -66,10 +85,13 @@ def list_of_vms(paths):
             if flag==1:    
                 l.append(new)
                 count+=1
-        nodes.append(l)
+        vms.append(l)
+    """
     print "##########################################################"
-    print nodes
-    return nodes
+    print l
+    print "##########################################################"
+    print paths
+    return l
 
 if __name__=='__main__':
     #input1 : file with paths in list of lists
@@ -81,12 +103,13 @@ if __name__=='__main__':
     print paths 
     G=nx.Graph()
     G=from_paths_to_graph(G,paths)
-    #print G.nodes() 
+    #for edge in G.edges():
+        #l[k]=edge
     if ( (len(G.nodes())/nPv+1)>V ):
         print "#####You have to define a different number of nodes/Vm because you have not enouph Vms.You need %s more Vms"%(len(G.nodes())/nPv+1-V) 
                 
     else:
-        Vms=list_of_vms(paths)
+        Vms=list_of_vms(G,paths)
     #data to edge list 
     #eList = convertToEdgeList(intL)
     
