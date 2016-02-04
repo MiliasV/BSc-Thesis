@@ -14,7 +14,7 @@ from pprint import pprint
 #Author: Vasileios Milias
 
 #nodes_per_Vm
-nPv=5
+nPv=6
 
 def readmyfile(myfile):
     with open(myfile,"r") as f:
@@ -44,54 +44,59 @@ def from_paths_to_graph(G,paths):
     return Gp
 
 
-def list_of_vms(G,paths):
-    #nodes that have been already placed into a Vm
-    vms=[] 
+def list_of_vms(G,paths,V):
+    vms=[]
     #as_to_vm_dict
     aTv={}
-    #the number of vm that we are
-    vm=0
-    vm+=1
     l=[]
-    count=0
     #no point of this
     flag=1
-    for path in paths:
-        if len(path)>=2 and path[0] not in aTv and path[1] not in aTv:
-            l.append((path[0],path[1],0))
-            aTv[path[0]]=vm
-            aTv[path[1]]=vm
-            count+=2
-            path.pop(0)
+    for vm in range(V):
+        paths= [x for x in paths if x != [] and len(x)>1]
+        l=[]
+        for path in paths:
+            if len(path)>=2 and path[0] not in aTv and path[1] not in aTv and len(l)<nPv/2:
+                l.append((path[0],path[1],0,vm))
+                aTv[path[0]]=vm
+                aTv[path[1]]=vm
+                path.pop(0)
             if len(path)>=2: 
                 for node in path:
-                    if count>=nPv:
+                    if len(l)>=nPv/2:
                         break
                     elif path[1] not in aTv:
-                        l.append((path[0],path[1],0))
+                        l.append((path[0],path[1],0,vm))
                         aTv[path[1]]=vm
-                        count+=1
-    """
-            paths= [x for x in paths if x != []]
-            if paths==[]:
-                break
-            new=paths[0].pop(0)
-            #print paths
-            for lists in vms:
-                if new in lists:
-                    flag=0
-            if new in l:
-                flag=0
-            if flag==1:    
-                l.append(new)
-                count+=1
+                        path.pop(0)
         vms.append(l)
-    """
+    
+    count=0
+    for path in paths:
+        for i in range(len(path)-2):
+            if count<V and len(vms[count])<nPv/2:
+                if path[i+1] not in aTv:
+                    vms[count].append((path[i],path[i+1],1,aTv[path[i]]))
+                    count+=1
+                    aTv[path[i+1]]=count
+                    path.remove(path[i])
+                elif path[i] not in aTv:
+                    vms[count].append((path[i+1],path[i],1,aTv[path[i+1]]))
+                    count+=1
+                    aTv[path[i]]=count
+                    path.remove(path[i])
+                
+            else:
+                count+=1
+    
+    print len(aTv)
     print "##########################################################"
-    print l
+    print "VMS"
+    print vms
     print "##########################################################"
+    print "REMAIN PATHS"
     print paths
-    return l
+    print aTv
+    return vms
 
 if __name__=='__main__':
     #input1 : file with paths in list of lists
@@ -109,7 +114,7 @@ if __name__=='__main__':
         print "#####You have to define a different number of nodes/Vm because you have not enouph Vms.You need %s more Vms"%(len(G.nodes())/nPv+1-V) 
                 
     else:
-        Vms=list_of_vms(G,paths)
+        Vms=list_of_vms(G,paths,V)
     #data to edge list 
     #eList = convertToEdgeList(intL)
     
