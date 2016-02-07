@@ -1,4 +1,4 @@
-#!/usr/bin/python  
+#/usr/bin/python  
 import time
 import re
 import os
@@ -14,7 +14,7 @@ from pprint import pprint
 #Author: Vasileios Milias
 
 #nodes_per_Vm
-nPv=6
+nPv=4
 
 def readmyfile(myfile):
     with open(myfile,"r") as f:
@@ -45,48 +45,123 @@ def from_paths_to_graph(G,paths):
 
 
 def list_of_vms(G,paths,V):
+    #inputs graph,paths,number of vms,runs for aTv>=2
+    #output list with the edges that go in every Vm.
+    #Format of output: [ [(node1,node2,{0,1},vm),(...)],[..],..]
+    #if the third elem. of tuple is 0 the nodes are both in this vm
+    #                            is 1 the first node is in this vm and the 
+    #                            second in the vm indicated by the 4th elem
     vms=[]
     #as_to_vm_dict
     aTv={}
+    #how many nodes have been inserted to the vm
+    vm_nodes={}
+    for vm in range(V):
+        vm_nodes[vm]=0
     l=[]
     #no point of this
     flag=1
+    e=G.edges()
+
+    #here we put as many edges as we can without "breaking" them in half (vm to vm) 
+    #thelei ftiaximo. Den pairnei ola ta zeygaria pou mporei
     for vm in range(V):
         paths= [x for x in paths if x != [] and len(x)>1]
         l=[]
         for path in paths:
             if len(path)>=2 and path[0] not in aTv and path[1] not in aTv and len(l)<nPv/2:
                 l.append((path[0],path[1],0,vm))
+                e=[x for x in e if ( (x[0]!=path[0] or x[1]!=path[1]) and (x[0]!=path[1] or x[1]!=path[0]) )]
                 aTv[path[0]]=vm
                 aTv[path[1]]=vm
+                vm_nodes[vm]+=2
+                print "%s,%s, added (%s,%s)"%(vm,vm_nodes,path[0],path[1])
                 path.pop(0)
             if len(path)>=2: 
                 for node in path:
-                    if len(l)>=nPv/2:
+                    if len(l)>nPv/2:
                         break
-                    elif path[1] not in aTv:
+                    elif aTv[path[0]]==vm and path[1] not in aTv:
                         l.append((path[0],path[1],0,vm))
+                        e=[x for x in e if ( (x[0]!=path[0] or x[1]!=path[1]) and (x[0]!=path[1] or x[1]!=path[0]) )]
                         aTv[path[1]]=vm
+                        vm_nodes[vm]+=1
                         path.pop(0)
         vms.append(l)
-    
-    count=0
-    for path in paths:
-        for i in range(len(path)-2):
-            if count<V and len(vms[count])<nPv/2:
-                if path[i+1] not in aTv:
-                    vms[count].append((path[i],path[i+1],1,aTv[path[i]]))
-                    count+=1
-                    aTv[path[i+1]]=count
-                    path.remove(path[i])
-                elif path[i] not in aTv:
-                    vms[count].append((path[i+1],path[i],1,aTv[path[i+1]]))
-                    count+=1
-                    aTv[path[i]]=count
-                    path.remove(path[i])
-                
+
+    #here we put the rest of the breaking edges
+    for edge in e:
+        if edge[0] in aTv:
+            vm0=aTv[edge[0]]
+        if edge[1] in aTv:
+            vm1=aTv[edge[1]]
+       
+        if edge[0] in aTv and edge[1] not in aTv:
+            #if i can put it in the same vm
+            if vm_nodes[aTv[edge[0]]]<nPv:
+                vms[aTv[edge[0]]].append((edge[1],edge[0],0,aTv[edge[0]]))
+                aTv[edge[1]]=aTv[edge[0]]
+                vm_nodes[aTv[edge[0]]]+=1
+                e=[x for x in e if ( (x[0]!=edge[0] or x[1]!=edge[1]) and (x[0]!=edge[1] or x[1]!=edge[0]) )]
+
             else:
+                for Vm in vm_nodes:
+                    if vm_nodes[Vm]<nPv:
+                        vms[Vm].append((edge[1],edge[0],1,vm0))
+                        vm_nodes[Vm]+=1
+                        vms[vm0].append((edge[0],edge[1],1,Vm))
+                        aTv[edge[1]]=Vm
+                        e=[x for x in e if ( (x[0]!=edge[0] or x[1]!=edge[1]) and (x[0]!=edge[1] or x[1]!=edge[0]) )]
+                        break
+
+        elif edge[1] in aTv and edge[0] not in aTv:
+            
+            if vm_nodes[aTv[edge[1]]]<nPv:
+                vms[aTv[edge[1]]].append((edge[0],edge[1],0,aTv[edge[1]]))
+                aTv[edge[0]]=aTv[edge[1]]
+                vm_nodes[aTv[edge[1]]]+=1
+                e=[x for x in e if ( (x[0]!=edge[0] or x[1]!=edge[1]) and (x[0]!=edge[1] or x[1]!=edge[0]) )]
+            else:
+                for Vm in vm_nodes:
+                    if vm_nodes[Vm]<nPv:
+                        vms[Vm].append((edge[0],edge[1],1,vm1))
+                        vm_nodes[Vm]+=1
+                        vms[vm1].append((edge[1],edge[0],1,Vm))
+                        aTv[edge[0]]=Vm
+                        e=[x for x in e if ( (x[0]!=edge[0] or x[1]!=edge[1]) and (x[0]!=edge[1] or x[1]!=edge[0]) )]
+                        break
+       
+        elif edge[0] in aTv and edge[1] in aTv:
+            vms[vm0].append((edge[0],edge[1],1,vm1))
+            vms[vm1].append((edge[1],edge[0],1,vm0))
+            e=[x for x in e if ( (x[0]!=edge[0] or x[1]!=edge[1]) and (x[0]!=edge[1] or x[1]!=edge[0]) )]
+        """
+        elif nPv==1:
+            count=0
+            for node in G.nodes():
+                aTv[node]=count
                 count+=1
+            for edge in e:
+                #nPv=1
+                print edge
+                count=0
+                vm0=aTv[edge[0]]    
+                vm1=aTv[edge[1]]
+                for Vm in range(len(vm_nodes)-1):
+                    if vm_nodes[Vm]<nPv:
+                        vms[Vm].append((edge[0],edge[1],1,vm1))
+                        vm_nodes[Vm]+=1
+                    if vm_nodes[Vm+1]<nPv:
+                        vms[Vm+1].append((edge[1],edge[0],1,vm0))
+                        vm_nodes[Vm+1]+=1
+                        break
+                    #e=[x for x in e if ( (x[0]!=edge[0] or x[1]!=edge[1]) and (x[0]!=edge[1] or x[1]!=edge[0]) )]
+           """ 
+
+                    
+
+
+           #e.remove((path[0],path[1]))
     
     print len(aTv)
     print "##########################################################"
@@ -95,7 +170,18 @@ def list_of_vms(G,paths,V):
     print "##########################################################"
     print "REMAIN PATHS"
     print paths
+    print "##########################################################"
+    print "as to Vm dictionary"
     print aTv
+    print "##########################################################"
+    print "REMAIN EDGES"
+    print e
+    print "##########################################################"
+    print "size of VM"
+    print vm_nodes
+    print "##########################################################"
+    print "starting edges"
+    print G.edges()
     return vms
 
 if __name__=='__main__':
@@ -112,9 +198,8 @@ if __name__=='__main__':
         #l[k]=edge
     if ( (len(G.nodes())/nPv+1)>V ):
         print "#####You have to define a different number of nodes/Vm because you have not enouph Vms.You need %s more Vms"%(len(G.nodes())/nPv+1-V) 
-                
-    else:
-        Vms=list_of_vms(G,paths,V)
+    #else:
+    #    Vms=list_of_vms(G,paths,V)
     #data to edge list 
     #eList = convertToEdgeList(intL)
     
