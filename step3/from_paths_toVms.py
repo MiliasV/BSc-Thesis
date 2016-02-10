@@ -88,6 +88,6 @@ if __name__=='__main__':
         count+=1
      
     nx.write_dot(G,'graph.dot')
-    os.system("neato -Tps graph.dot >graph.ps")
+    os.system("dot -Tpng graph.dot -o graph.png")
     #os.system("open graph.ps")
     #print time.time()-start_time
