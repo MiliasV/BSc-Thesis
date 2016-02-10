@@ -107,7 +107,7 @@ def bfs_as_relationships(G,victim,mh):
     #victim, malicious hosts
     paths=[]
     for m in mh:
-        #print m
+        print m
         stack=[(m,[m])]
         while stack:
             (vertex,path)=stack.pop(0)
@@ -145,12 +145,14 @@ def bfs_as_relationships(G,victim,mh):
         for i in range(len(path)-1):
             L.append(G[path[i]][path[i+1]]["weight"])
         print L
-    
+    """ 
+    """ 
     if len(mh)==len(paths):
         print "All paths exist"
     else:
         print "%s paths don't exist" %(len(mh)-len(paths))
-    """
+    """ 
+    
     return paths
 
 def from_paths_to_graph(G,paths):
@@ -176,11 +178,10 @@ if __name__=='__main__':
     wList = convertToWeightedEdgeList(intL)
     G=nx.DiGraph()
     G.add_weighted_edges_from(wList)
-    as_paths =( bfs_as_relationships(G,42548,
-                                    [42394,42781,174,6453,701,209, 6730, 10026,
-                                    1239, 1267, 1916, 2497, 3209, 
-                                    196615, 5412, 3320, 3340, 42, 
-                                    3357]) )
+    as_paths =( bfs_as_relationships(G,701,
+                                    [42548,42394,42781,174,6453,2153,39282,39755,11773,209, 6730,
+                                    20485,41199,16034,1239, 1267, 1916, 2497, 3209, 
+                                    196615, 5412, 3320, 3340, 42,3357,19227,10026]) )
     
     
     print as_paths

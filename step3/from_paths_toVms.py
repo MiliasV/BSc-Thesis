@@ -36,13 +36,28 @@ def reveList(eList):
     return rev    
 
 
-def from_paths_to_graph(G,paths):
-    Gp=nx.Graph()
+def from_paths_to_graph(paths):
+    G=nx.Graph()
     for path in paths:
         for i in range(len(path)-1):
-            Gp.add_edge(path[i],path[i+1])
-    return Gp
+            G.add_edge(path[i],path[i+1])
+    return G
 
+def list_of_vms(G,parts):
+    l=[]
+    vm={}
+    count=0
+    for n in G.nodes():
+        vm[n]=parts[count]
+        count+=1
+    for e in G.edges():
+        l.append((e[0],e[1],vm[e[0]],vm[e[1]]))
+
+    #print vm
+    #print l
+    return l
+    #for e in G.edges():
+        
 
 if __name__=='__main__':
     #input1 : file with paths in list of lists
@@ -51,23 +66,28 @@ if __name__=='__main__':
     start_time=time.time()
     paths=readmyfile(sys.argv[1])
     V=int(sys.argv[2])
-    print paths 
+    #print paths 
     G=nx.Graph()
-    G=from_paths_to_graph(G,paths)
+    G=from_paths_to_graph(paths)
     
     #if ( (len(G.nodes())/nPv+1)>V ):
     #   print "#####You have to define a different number of nodes/Vm because you have not enouph Vms.You need %s more Vms"%(len(G.nodes())/nPv+1-V) 
     
     (edgecuts,parts)=metis.part_graph(G,V)
-    colors = ['red','blue','green','yellow','azure','cyan','violet','firebrick3','pink','black','purple']
     print edgecuts
-    print parts
-    print len(G.nodes())
+    #print parts
+    #print len(G.nodes())
+    
+    l = list_of_vms(G,parts)
+    print l
+    #Graphic representation
     count=0
+    colors = ['red','blue','green','yellow','antiquewhite4','brown','cyan','violet','firebrick3','pink','black','purple']
     for n in G.nodes():
         G.node[n]['color']=colors[parts[count]]
         count+=1
-    
+     
     nx.write_dot(G,'graph.dot')
     os.system("neato -Tps graph.dot >graph.ps")
-    print time.time()-start_time
+    #os.system("open graph.ps")
+    #print time.time()-start_time
