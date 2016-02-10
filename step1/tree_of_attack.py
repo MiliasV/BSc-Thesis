@@ -33,7 +33,7 @@ def numberOfNodes(eList):
     return len(G.nodes())
 
 def convertToWeightedEdgeList(L):
-    #here we make the edgeList from the format : fromAs|toAs|{0,-1}
+    #here we make the edgeList from the format : ProviderAs|CustomerAs|{0,-1}
     #For undirected edges we add a new edge with weight 0
     #For directed edges we add a new edge fromAS->toAs with weight 1
     #and another edge toAs->fromAs with weight 2
@@ -103,11 +103,11 @@ def reveList(eList):
 def bfs_as_relationships(G,victim,mh):
     #bfs and as-relationships properties
     #inputs: weighted graph with as-relationships with the format: 
-    #                           p2c -> w=1, c2p -> w=2 ,p2p -> w=1
-    #        victim, malicious hosts
+    #p2c ->weight 1, c2p ->weight 2, p2p -> weight 0
+    #victim, malicious hosts
     paths=[]
     for m in mh:
-        print m
+        #print m
         stack=[(m,[m])]
         while stack:
             (vertex,path)=stack.pop(0)
@@ -116,9 +116,9 @@ def bfs_as_relationships(G,victim,mh):
 
                     if (
                             ( 
-                              ( (G[path[len(path)-2]][path[len(path)-1]]["weight"]==1) and ( (G[vertex][next]["weight"]==(1)) )) or
-                              ( (G[path[len(path)-2]][path[len(path)-1]]["weight"]==0) and ( (G[vertex][next]["weight"]==(2 or 0)) )) or
-                              ( (G[path[len(path)-2]][path[len(path)-1]]["weight"]==2) and G[vertex][next]["weight"]==2 )  
+                              ( (G[path[len(path)-2]][path[len(path)-1]]["weight"]==2) and ( (G[vertex][next]["weight"]==(2 or 0)) )) or
+                              ( (G[path[len(path)-2]][path[len(path)-1]]["weight"]==0) and ( (G[vertex][next]["weight"]==(1 or 0)) )) or
+                              ( (G[path[len(path)-2]][path[len(path)-1]]["weight"]==1) and G[vertex][next]["weight"]==1 )  
                             )  and
                             len(path)<7
                          ): 
@@ -139,16 +139,18 @@ def bfs_as_relationships(G,victim,mh):
                 else:
                     
                     stack.append((next,path+[next]))
-    
+    """
     for path in paths:
         L=[]
         for i in range(len(path)-1):
             L.append(G[path[i]][path[i+1]]["weight"])
         print L
+    
     if len(mh)==len(paths):
         print "All paths exist"
     else:
         print "%s paths don't exist" %(len(mh)-len(paths))
+    """
     return paths
 
 def from_paths_to_graph(G,paths):
@@ -174,19 +176,22 @@ if __name__=='__main__':
     wList = convertToWeightedEdgeList(intL)
     G=nx.DiGraph()
     G.add_weighted_edges_from(wList)
-    as_paths =( bfs_as_relationships(G,174,
-                                    [6453, 701,209, 6730, 10026,
+    as_paths =( bfs_as_relationships(G,42548,
+                                    [42394,42781,174,6453,701,209, 6730, 10026,
                                     1239, 1267, 1916, 2497, 3209, 
                                     196615, 5412, 3320, 3340, 42, 
                                     3357]) )
     
     
-    print as_paths                            
+    for path in  as_paths:                            
+        print path
     Gtree=from_paths_to_graph(G,as_paths)
-    pos=nx.circular_layout(Gtree)
-    nx.draw(Gtree,pos)
-    nx.draw_networkx_labels(Gtree,pos)
-    plt.show()
+    #pos=nx.circular_layout(Gtree)
+    #nx.draw(Gtree,pos)
+    #nx.draw_networkx_labels(Gtree,pos)
+    #plt.show()
+    """
+    debug
     print "######################################"
     print Gtree.edges(data=True)
     print "#####################################"
@@ -195,3 +200,4 @@ if __name__=='__main__':
     print Gtree.nodes()
     print nx.is_directed_acyclic_graph(Gtree) 
     print time.time()-start_time
+    """
