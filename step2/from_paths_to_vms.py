@@ -74,12 +74,13 @@ if __name__=='__main__':
     #   print "#####You have to define a different number of nodes/Vm because you have not enouph Vms.You need %s more Vms"%(len(G.nodes())/nPv+1-V) 
     
     (edgecuts,parts)=metis.part_graph(G,V)
-    print edgecuts
+    #print edgecuts
     #print parts
     #print len(G.nodes())
     
     l = list_of_vms(G,parts)
     print l
+    """
     #Graphic representation
     count=0
     colors = ['red','blue','green','yellow','antiquewhite4','brown','cyan','violet','firebrick3','pink','black','purple']
@@ -90,4 +91,5 @@ if __name__=='__main__':
     nx.write_dot(G,'graph.dot')
     os.system("dot -Tpng graph.dot -o graph.png")
     #os.system("open graph.ps")
+    """
     #print time.time()-start_time
