@@ -19,7 +19,7 @@ It returns the paths of the tree.
 (2)
 from_paths_to_vms.py
 
-This script takes as input: file with the paths (list of lists) 
+  This script takes as input: file with the paths (list of lists) 
                             number of Vms (V)
   
   It makes a partition of the graph in V parts and it writes to a file a list 
@@ -27,11 +27,14 @@ This script takes as input: file with the paths (list of lists)
   For example : [(123,256,1,4),..] means that node 123 is in Vm1, node 256 is in Vm4, and there is an 
   edge between them
   
-  NEXT STEPS
+ (3) 
+ip_to_as.py
   
-  -Make a script that finds the match between Ips and Ases from those that are included in the dataset of 
+  Script that prints the match between Ips and Ases from those that are included in the dataset of 
   the Ddos attack of 2007 (August) (CAIDA dataset) so that we can build this specific tree of attack.
   For this goal we used a file that has the ips-asn mapping that existed in 01 August 2007  (from Delft university)
+  
+  NEXT STEP
 
   -Make a script that takes as input a list of Vms and builds the overall topology by running a mininet script
   with the right arguments in each of the Vms.
