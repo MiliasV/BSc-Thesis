@@ -170,22 +170,23 @@ if __name__=='__main__':
     #strings to ints
     intL = [list(map(int, row)) for row in L]
     
+    with open(sys.argv[2]) as f:
+        mh=f.read().splitlines()
+    mh.remove('None')
+    mH=map(int,mh)
     #data to edge list 
     #eList = convertToEdgeList(intL)
     
     wList = convertToWeightedEdgeList(intL)
     G=nx.DiGraph()
     G.add_weighted_edges_from(wList)
-    as_paths =( bfs_as_relationships(G,42548,
-                                    [42394,42781,174,6453,701,209, 6730, 10026,
-                                    1239, 1267, 1916, 2497, 3209, 
-                                    196615, 5412, 3320, 3340, 42, 
-                                    3357]) )
-    
-    
+    as_paths = bfs_as_relationships(G,19262,mH)
+                                     
     for path in  as_paths:                            
         print path
-    Gtree=from_paths_to_graph(G,as_paths)
+    print len(as_paths)
+    #19262,[42394,42781,174,6453,701,209, 6730, 10026,1239, 1267, 1916, 2497, 3209, 196615, 5412, 3320, 3340, 42, 3357]) )
+    #Gtree=from_paths_to_graph(G,as_paths)
     #pos=nx.circular_layout(Gtree)
     #nx.draw(Gtree,pos)
     #nx.draw_networkx_labels(Gtree,pos)
