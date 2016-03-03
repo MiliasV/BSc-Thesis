@@ -107,7 +107,7 @@ def bfs_as_relationships(G,victim,mh):
     #victim, malicious hosts
     paths=[]
     for m in mh:
-        #print m
+        print m
         stack=[(m,[m])]
         while stack:
             (vertex,path)=stack.pop(0)
@@ -117,8 +117,8 @@ def bfs_as_relationships(G,victim,mh):
                     if (
                             ( 
                               ( (G[path[len(path)-2]][path[len(path)-1]]["weight"]==2) and ( (G[vertex][next]["weight"]==(2 or 0)) )) or
-                              ( (G[path[len(path)-2]][path[len(path)-1]]["weight"]==0) and ( (G[vertex][next]["weight"]==(1 or 0)) )) or
-                              ( (G[path[len(path)-2]][path[len(path)-1]]["weight"]==1) and G[vertex][next]["weight"]==1 )  
+                              ( (G[path[len(path)-2]][path[len(path)-1]]["weight"]==0) and ( (G[vertex][next]["weight"]==(0 or 1)) )) or
+                              ( (G[path[len(path)-2]][path[len(path)-1]]["weight"]==1) and G[vertex][next]["weight"]==(1) )  
                             )  and
                             len(path)<7
                          ): 
@@ -139,7 +139,7 @@ def bfs_as_relationships(G,victim,mh):
                 else:
                     
                     stack.append((next,path+[next]))
-    """
+    
     for path in paths:
         L=[]
         for i in range(len(path)-1):
@@ -150,7 +150,8 @@ def bfs_as_relationships(G,victim,mh):
         print "All paths exist"
     else:
         print "%s paths don't exist" %(len(mh)-len(paths))
-    """
+        
+
     return paths
 
 def from_paths_to_graph(G,paths):
@@ -174,13 +175,16 @@ if __name__=='__main__':
         mh=f.read().splitlines()
     mh.remove('None')
     mH=map(int,mh)
+    smallmH=[]
+    for i in range(20):
+        smallmH.append(mH[i])
     #data to edge list 
     #eList = convertToEdgeList(intL)
     
     wList = convertToWeightedEdgeList(intL)
     G=nx.DiGraph()
     G.add_weighted_edges_from(wList)
-    as_paths = bfs_as_relationships(G,19262,mH)
+    as_paths = bfs_as_relationships(G,701,smallmH)
                                      
     for path in  as_paths:                            
         print path
