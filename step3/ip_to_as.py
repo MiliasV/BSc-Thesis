@@ -25,6 +25,6 @@ def ip_as_mapping(ip_attack_file,ip_asdata):
     #print asndb.lookup('71.126.22.64')
 
 if __name__=='__main__':
-    start_time=time.time()
+    #start_time=time.time()
     ip_as_mapping(sys.argv[1],sys.argv[2])
-    print time.time()-start_time
+    #print time.time()-start_time
