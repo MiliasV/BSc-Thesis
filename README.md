@@ -30,8 +30,9 @@ This script takes as input: file with the paths (list of lists)
   NEXT STEPS
   
   -Make a script that finds the match between Ips and Ases from those that are included in the dataset of 
-  the Ddos attack of 2007 (CAIDA dataset) so that we can build this specific tree of attack.
-  
+  the Ddos attack of 2007 (August) (CAIDA dataset) so that we can build this specific tree of attack.
+  For this goal we used a file that has the ips-asn mapping that existed in 01 August 2007  (from Delft university)
+
   -Make a script that takes as input a list of Vms and builds the overall topology by running a mininet script
   with the right arguments in each of the Vms.
   
