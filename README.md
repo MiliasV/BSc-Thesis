@@ -33,7 +33,8 @@ ip_to_as.py
   Script that prints the match between Ips and Ases from those that are included in the dataset of 
   the Ddos attack of 2007 (August) (CAIDA dataset) so that we can build this specific tree of attack.
   For this goal we used a file that has the ips-asn mapping that existed in 01 August 2007  (from Delft university)
-  
+  (The files with the data are missing from Github because they are too large)
+
   NEXT STEP
 
   -Make a script that takes as input a list of Vms and builds the overall topology by running a mininet script
