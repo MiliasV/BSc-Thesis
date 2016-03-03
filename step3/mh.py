@@ -28,10 +28,4 @@ if __name__=='__main__':
         aS.append(literal_eval(l)[0])
     aS=list(set(aS))
     print aS
-    #for tuples in m:
-        #print tuples[0]
-        #print tuples[1]
-        #aS.append(tuples[0])
-    #print aS
-    
     #print time.time()-start_time
