@@ -107,7 +107,7 @@ def bfs_as_relationships(G,victim,mh):
     #victim, malicious hosts
     paths=[]
     for m in mh:
-        print m
+        #print m
         stack=[(m,[m])]
         while stack:
             (vertex,path)=stack.pop(0)
@@ -139,7 +139,7 @@ def bfs_as_relationships(G,victim,mh):
                 else:
                     
                     stack.append((next,path+[next]))
-    
+    """
     for path in paths:
         L=[]
         for i in range(len(path)-1):
@@ -151,7 +151,7 @@ def bfs_as_relationships(G,victim,mh):
     else:
         print "%s paths don't exist" %(len(mh)-len(paths))
         
-
+    """
     return paths
 
 def from_paths_to_graph(G,paths):
@@ -176,7 +176,7 @@ if __name__=='__main__':
     mh.remove('None')
     mH=map(int,mh)
     smallmH=[]
-    for i in range(20):
+    for i in range(200):
         smallmH.append(mH[i])
     #data to edge list 
     #eList = convertToEdgeList(intL)
@@ -185,10 +185,13 @@ if __name__=='__main__':
     G=nx.DiGraph()
     G.add_weighted_edges_from(wList)
     as_paths = bfs_as_relationships(G,701,smallmH)
-                                     
-    for path in  as_paths:                            
-        print path
-    print len(as_paths)
+    
+    print as_paths
+
+    print time.time()-start_time
+    #for path in  as_paths:                            
+    #print path
+    #print len(as_paths)
     #19262,[42394,42781,174,6453,701,209, 6730, 10026,1239, 1267, 1916, 2497, 3209, 196615, 5412, 3320, 3340, 42, 3357]) )
     #Gtree=from_paths_to_graph(G,as_paths)
     #pos=nx.circular_layout(Gtree)
@@ -204,5 +207,4 @@ if __name__=='__main__':
     print "#####################################"
     print Gtree.nodes()
     print nx.is_directed_acyclic_graph(Gtree) 
-    print time.time()-start_time
     """
