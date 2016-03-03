@@ -42,11 +42,11 @@ ip_to_as.py
   
 Sequence:  
 
-1 -> Making of the tree of attack (Step 1)
+1 -> Turn the ips of the attack into ases (Step 3)
 
-2 -> Turn the ips in the paths of the attack into ases (Step 3)
+2 -> Make the tree of attack depending on the ases of the malicious hosts and victim from (1) (Step 1)
 
-3 -> Partition of the ases graph to the number of the Vms we desire (Step 2)
+3 -> Partition of the ases-attack graph in the number of the Vms we desire (Step 2)
 
 4 -> Build the overall topology into the Vms, with mininet (Step 4) 
 				
