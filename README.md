@@ -40,6 +40,10 @@ ip_to_as.py
   -Make a script that takes as input a list of Vms and builds the overall topology by running a mininet script
   with the right arguments in each of the Vms.
   
-  
+Sequence:  1 -> Making of the tree of attack (Step 1)
+		   2 -> Turn the ips in the paths of the attack into ases (Step 3)
+		   3 -> Partition of the ases graph to the number of the Vms we desire (Step 2)
+		   4 -> Build the overall topology into the Vms, with mininet (Step 4) 
+				
   
   
