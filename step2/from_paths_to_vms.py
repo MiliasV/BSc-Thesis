@@ -83,13 +83,13 @@ if __name__=='__main__':
     
     #Graphic representation
     count=0
-    colors = ['red','blue','green','yellow','antiquewhite4','brown','cyan','violet','firebrick3','pink','black','purple']
+    colors = ['darkkhaki','darkorange','darkslategray2','darkviolet','dimgrey','khaki','lightcoral','lightpink4','red','blue','green','yellow','antiquewhite4','brown','cyan','violet','firebrick3','pink','black','purple']
     for n in G.nodes():
         G.node[n]['color']=colors[parts[count]]
         count+=1
      
-    nx.write_dot(G,'200graph.dot')
-    os.system("dot -Tpng 200graph.dot -o 200graph.png")
+    nx.write_dot(G,'1000graph.dot')
+    os.system("dot -Tpng 1000graph.dot -o 1000graph.png")
     #os.system("open graph.ps")
 
     #print time.time()-start_time

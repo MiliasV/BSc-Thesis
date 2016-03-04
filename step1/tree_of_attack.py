@@ -176,15 +176,15 @@ if __name__=='__main__':
     mh.remove('None')
     mH=map(int,mh)
     smallmH=[]
-    for i in range(200):
-        smallmH.append(mH[i])
+    #for i in range(200):
+        #smallmH.append(mH[i])
     #data to edge list 
     #eList = convertToEdgeList(intL)
     
     wList = convertToWeightedEdgeList(intL)
     G=nx.DiGraph()
     G.add_weighted_edges_from(wList)
-    as_paths = bfs_as_relationships(G,701,smallmH)
+    as_paths = bfs_as_relationships(G,701,mH)
     
     print as_paths
 
