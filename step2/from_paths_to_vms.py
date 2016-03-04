@@ -68,6 +68,7 @@ if __name__=='__main__':
     V=int(sys.argv[2])
     #print paths 
     G=nx.Graph()
+    print len(paths)
     G=from_paths_to_graph(paths)
     
     #if ( (len(G.nodes())/nPv+1)>V ):
@@ -80,7 +81,7 @@ if __name__=='__main__':
     
     l = list_of_vms(G,parts)
     print l
-    
+    """ 
     #Graphic representation
     count=0
     colors = ['darkkhaki','darkorange','darkslategray2','darkviolet','dimgrey','khaki','lightcoral','lightpink4','red','blue','green','yellow','antiquewhite4','brown','cyan','violet','firebrick3','pink','black','purple']
@@ -93,3 +94,4 @@ if __name__=='__main__':
     #os.system("open graph.ps")
 
     #print time.time()-start_time
+    """
