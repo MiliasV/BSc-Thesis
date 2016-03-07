@@ -81,7 +81,7 @@ if __name__=='__main__':
     
     l = list_of_vms(G,parts)
     print l
-    """ 
+     
     #Graphic representation
     count=0
     colors = ['darkkhaki','darkorange','darkslategray2','darkviolet','dimgrey','khaki','lightcoral','lightpink4','red','blue','green','yellow','antiquewhite4','brown','cyan','violet','firebrick3','pink','black','purple']
@@ -89,9 +89,8 @@ if __name__=='__main__':
         G.node[n]['color']=colors[parts[count]]
         count+=1
      
-    nx.write_dot(G,'1000graph.dot')
-    os.system("dot -Tpng 1000graph.dot -o 1000graph.png")
+    nx.write_dot(G,'10graph.dot')
+    os.system("dot -Tpng 10graph.dot -o 10graph.png")
     #os.system("open graph.ps")
 
     #print time.time()-start_time
-    """

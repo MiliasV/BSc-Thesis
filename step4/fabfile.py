@@ -5,8 +5,8 @@ import networkx as nx
 #env.hosts = ['snf-680603.vm.okeanos.grnet.gr']
 #env.user = 'root'
 #env.password = 'byslaf366'
-env.hosts = ['mininet@192.168.56.101','mininet@192.168.56.102']
-#env.hosts=['mininet@192.168.56.102']
+#env.hosts = ['mininet@192.168.56.101','mininet@192.168.56.102']
+env.hosts=['mininet@192.168.56.102']
 #env.user = 'mininet'
 env.passwords = {'mininet@192.168.56.101:22': 'mininet', 'mininet@192.168.56.102:22': 'mininet'}
 
@@ -27,8 +27,8 @@ def connection():
 	#run('sudo mn')
 	#with cd( '~/mininet/custom/'):
 	#	run('ls')
-	put('adjToNetwork.py','~/')
-	put('exam.csv','~/')
+	#put('adjToNetwork.py','~/')
+	#put('exam.csv','~/')
 	#put('~/USC-NSL-miniNExT-75c2781')
         # Simplest form:
         #environment = prompt('Please specify target environment: ')
@@ -38,9 +38,13 @@ def connection():
         #open_shell()
         #with hide('output'):
         #with
-        run('sudo mn -c')
-        with settings(warn_only=True):
-            run('nohup sudo python  adjToNetwork.py exam.csv ')
+        #run('sudo mn -c')
+        #put ('script.py','~/')
+        #put ('list.txt','~/')
+        #run('python script.py list.txt %s' %env.host)
+        run('ls')
+        #with settings(warn_only=True):
+            #run('nohup sudo python  adjToNetwork.py exam.csv ')
             #run('disown')
 
 if __name__=='__main__':
