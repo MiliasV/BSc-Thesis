@@ -1,15 +1,17 @@
 from fabric.api import * 
 #cd,parallel,run,env,execute,task,sudo,open_shell
 import networkx as nx
-
+import sys
+import os
+from ast  import literal_eval
 #env.hosts = ['snf-680603.vm.okeanos.grnet.gr']
 #env.user = 'root'
 #env.password = 'byslaf366'
-#env.hosts = ['mininet@192.168.56.101','mininet@192.168.56.102']
-env.hosts=['mininet@192.168.56.102']
+env.hosts = ['mininet@192.168.56.101','mininet@192.168.56.102']
+#env.hosts=['mininet@192.168.56.102']
 #env.user = 'mininet'
 env.passwords = {'mininet@192.168.56.101:22': 'mininet', 'mininet@192.168.56.102:22': 'mininet'}
-
+ips=['192.168.56.101','192.1568.56.102']
 
 
 def showOvs():
@@ -48,4 +50,20 @@ def connection():
             #run('disown')
 
 if __name__=='__main__':
-	execute(connection)
+    f=open(sys.argv[1])
+    line=f.readline()
+    l=literal_eval(line)[:]
+    print l
+    e={}
+    count=0
+    for i in range(len(ips)):
+        e[i]=ips[i]
+
+    l=[(edge[0],edge[1],e[edge[2]],e[edge[3]]) for edge in l] 
+    #for edge in l:
+        #edge[2]=e[edge[2]]
+        #edge[3]=e[edge[3]]
+    print " "
+    print '###############################'
+    print l
+        #execute(connection)
