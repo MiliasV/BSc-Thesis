@@ -1,4 +1,5 @@
-from fabric.api import * 
+from fabric.api import *
+from fabric.tasks import execute
 #cd,parallel,run,env,execute,task,sudo,open_shell
 import networkx as nx
 import sys
@@ -7,10 +8,14 @@ from ast  import literal_eval
 #env.hosts = ['snf-680603.vm.okeanos.grnet.gr']
 #env.user = 'root'
 #env.password = 'byslaf366'
-env.hosts = ['mininet@192.168.56.101','mininet@192.168.56.102']
 #env.hosts=['mininet@192.168.56.102']
 #env.user = 'mininet'
+env.hosts=['mininet@192.168.56.101','mininet@192.168.56.102']
+
+#env.hosts = ["mininet@192.168.56.101","mininet@192.168.56.102"]
+
 env.passwords = {'mininet@192.168.56.101:22': 'mininet', 'mininet@192.168.56.102:22': 'mininet'}
+
 ips=['192.168.56.101','192.1568.56.102']
 
 
@@ -44,26 +49,33 @@ def connection():
         #put ('script.py','~/')
         #put ('list.txt','~/')
         #run('python script.py list.txt %s' %env.host)
-        run('ls')
+        put('edges_mininet.txt','~/')
+        #put('min_builder.py','~/')
+        #run('sudo python min_builder.py edges_mininet.txt %s' %env.host)
         #with settings(warn_only=True):
             #run('nohup sudo python  adjToNetwork.py exam.csv ')
             #run('disown')
 
 if __name__=='__main__':
+    
     f=open(sys.argv[1])
     line=f.readline()
     l=literal_eval(line)[:]
-    print l
+    #print l
     e={}
     count=0
     for i in range(len(ips)):
         e[i]=ips[i]
 
     l=[(edge[0],edge[1],e[edge[2]],e[edge[3]]) for edge in l] 
-    #for edge in l:
-        #edge[2]=e[edge[2]]
-        #edge[3]=e[edge[3]]
+    file = open("edges_mininet.txt",'w+')
+    for item in l:
+        print>>file, item
+    execute(connection)
+    """
     print " "
     print '###############################'
     print l
-        #execute(connection)
+    """
+    """
+    """
