@@ -16,14 +16,20 @@ def ip_as_mapping(ip_attack_file,ip_asdata):
     asndb=pyasn.pyasn(ip_asdata)
     df=pd.read_csv(ip_attack_file,header=None,usecols=[2],delimiter=" ")
     l=df.drop_duplicates().values.tolist()
+    #with open(ip_attack_file)  as f:
+        #l=f.read().splitlines()
+    #print l
+    #print len(l)
+    #for i in l:
+        #print i
+        #print asndb.lookup(i)
+    
     for i in l:
         for ip in i:
             ip='.'.join(ip.split('.')[0:4])
             print ip         
             print asndb.lookup(ip)
-    #victim's as
     #print asndb.lookup('71.126.22.64')
-
 if __name__=='__main__':
     #start_time=time.time()
     ip_as_mapping(sys.argv[1],sys.argv[2])

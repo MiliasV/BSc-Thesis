@@ -45,6 +45,7 @@ def from_paths_to_graph(paths):
 
 def list_of_vms(G,parts):
     l=[]
+    k=[]
     vm={}
     count=0
     for n in G.nodes():
@@ -52,10 +53,15 @@ def list_of_vms(G,parts):
         count+=1
     for e in G.edges():
         l.append((e[0],e[1],vm[e[0]],vm[e[1]]))
+    for e in l:
+        if e[0]==701:
+            k.append((e[1],e[0],vm[e[1]],vm[e[0]]))
+        else:
+            k.append((e[0],e[1],vm[e[0]],vm[e[1]]))
 
     #print vm
     #print l
-    return l
+    return k
     #for e in G.edges():
         
 
@@ -66,6 +72,7 @@ if __name__=='__main__':
     start_time=time.time()
     paths=readmyfile(sys.argv[1])
     V=int(sys.argv[2])
+    
     #print paths 
     G=nx.Graph()
     print len(paths)
@@ -80,7 +87,7 @@ if __name__=='__main__':
     #print len(G.nodes())
     
     l = list_of_vms(G,parts)
-    print l
+    #print l
      
     #Graphic representation
     count=0
@@ -88,9 +95,10 @@ if __name__=='__main__':
     for n in G.nodes():
         G.node[n]['color']=colors[parts[count]]
         count+=1
-     
-    nx.write_dot(G,'10graph.dot')
-    os.system("dot -Tpng 10graph.dot -o 10graph.png")
+    
+    #pos=nx.circular_layout(G)
+    nx.write_dot(G,'1398_all_ases.dot')
+    #os.system("dot -Tpng 10circlegraph.dot -o 10circlegraph.png")
     #os.system("open graph.ps")
 
     #print time.time()-start_time

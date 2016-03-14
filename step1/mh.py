@@ -27,6 +27,8 @@ if __name__=='__main__':
     for l in k:
         aS.append(literal_eval(l)[0])
     aS=list(set(aS))
-    for i in aS:
-        print i
+    print aS
+    print len(aS)
+    #for i in aS:
+        #print i
     #print time.time()-start_time
