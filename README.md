@@ -4,7 +4,15 @@ Diplomatiki
 
 STEPS
 
-(1)
+ (1) 
+ip_to_as.py
+  
+  Script that prints the match between Ips and Ases from those that are included in the dataset of 
+  the Ddos attack of 2007 (August) (CAIDA dataset) so that we can build this specific tree of attack.
+  For this goal we used a file that has the ips-asn mapping that existed in 01 August 2007  (from Delft university)
+  (The files with the data are missing from Github because they are too large)
+
+(2)
 tree_of_attack.py
 
 This script takes as input a dataset that contains as relatonships with the form:
@@ -16,7 +24,7 @@ we have define inside the script.
 
 It returns the paths of the tree.
 
-(2)
+(3)
 from_paths_to_vms.py
 
   This script takes as input: file with the paths (list of lists) 
@@ -27,13 +35,6 @@ from_paths_to_vms.py
   For example : [(123,256,1,4),..] means that node 123 is in Vm1, node 256 is in Vm4, and there is an 
   edge between them
   
- (3) 
-ip_to_as.py
-  
-  Script that prints the match between Ips and Ases from those that are included in the dataset of 
-  the Ddos attack of 2007 (August) (CAIDA dataset) so that we can build this specific tree of attack.
-  For this goal we used a file that has the ips-asn mapping that existed in 01 August 2007  (from Delft university)
-  (The files with the data are missing from Github because they are too large)
 
   NEXT STEP
 
