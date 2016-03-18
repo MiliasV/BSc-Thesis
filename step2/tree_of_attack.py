@@ -9,6 +9,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 from collections import deque
 from pprint import pprint
+from random import randint
 
 #Author: Vasileios Milias
 def readmyfile(myfile):
@@ -167,24 +168,33 @@ if __name__=='__main__':
     
     start_time=time.time()
     L=readmyfile(sys.argv[1])
-    
     #strings to ints
     intL = [list(map(int, row)) for row in L]
+    """ 
+    
+    count=0
+    k=[]
+    while(count<=300):
+        k.append(intL[randint(0,len(intL)-1)][0])
+        count+=1
+    for i in k:
+        print i
+    """ 
     
     with open(sys.argv[2]) as f:
         mh=f.read().splitlines()
-    mh.remove('None')
+    #mh.remove('None')
     mH=map(int,mh)
-    #smallmH=[]
-    #for i in range(10):
-        #smallmH.append(mH[i])
+    smallmH=[]
+    for i in range(100):
+        smallmH.append(mH[i])
     #data to edge list 
     #eList = convertToEdgeList(intL)
     
     wList = convertToWeightedEdgeList(intL)
     G=nx.DiGraph()
     G.add_weighted_edges_from(wList)
-    as_paths = bfs_as_relationships(G,701,mH)
+    as_paths = bfs_as_relationships(G,701,smallmH)
     
     print as_paths
 
@@ -198,7 +208,8 @@ if __name__=='__main__':
     #nx.draw(Gtree,pos)
     #nx.draw_networkx_labels(Gtree,pos)
     #plt.show()
-    """
+    
+    """ 
     debug
     print "######################################"
     print Gtree.edges(data=True)
@@ -208,3 +219,4 @@ if __name__=='__main__':
     print Gtree.nodes()
     print nx.is_directed_acyclic_graph(Gtree) 
     """
+
