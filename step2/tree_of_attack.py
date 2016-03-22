@@ -118,7 +118,7 @@ def bfs_as_relationships(G,victim,mh):
                     if (
                             ( 
                               ( (G[path[len(path)-2]][path[len(path)-1]]["weight"]==2) and ( (G[vertex][next]["weight"]==(2 or 0)) )) or
-                              ( (G[path[len(path)-2]][path[len(path)-1]]["weight"]==0) and ( (G[vertex][next]["weight"]==(0 or 1)) )) or
+                              ( (G[path[len(path)-2]][path[len(path)-1]]["weight"]==0) and ( (G[vertex][next]["weight"]==( 1)) )) or
                               ( (G[path[len(path)-2]][path[len(path)-1]]["weight"]==1) and G[vertex][next]["weight"]==(1) )  
                             )  and
                             len(path)<7
@@ -186,7 +186,7 @@ if __name__=='__main__':
     #mh.remove('None')
     mH=map(int,mh)
     smallmH=[]
-    for i in range(100):
+    for i in range(400):
         smallmH.append(mH[i])
     #data to edge list 
     #eList = convertToEdgeList(intL)
@@ -195,7 +195,6 @@ if __name__=='__main__':
     G=nx.DiGraph()
     G.add_weighted_edges_from(wList)
     as_paths = bfs_as_relationships(G,701,smallmH)
-    
     print as_paths
 
     print time.time()-start_time
