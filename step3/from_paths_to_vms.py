@@ -97,7 +97,7 @@ if __name__=='__main__':
         count+=1
     
     #pos=nx.circular_layout(G)
-    nx.write_dot(G,'random_100_tree.dot')
+    nx.write_dot(G,'random_400.dot')
     #os.system("dot -Tpng 10circlegraph.dot -o 10circlegraph.png")
     #os.system("open graph.ps")
 

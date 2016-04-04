@@ -50,8 +50,8 @@ def connection():
         #put ('list.txt','~/')
         #run('python script.py list.txt %s' %env.host)
         put('edges_mininet.txt','~/')
-        #put('min_builder.py','~/')
-        #run('sudo python min_builder.py edges_mininet.txt %s' %env.host)
+        put('min_builder.py','~/')
+        run('sudo python min_builder.py edges_mininet.txt %s' %env.host)
         #with settings(warn_only=True):
             #run('nohup sudo python  adjToNetwork.py exam.csv ')
             #run('disown')
