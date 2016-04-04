@@ -25,24 +25,27 @@ class allH1Topo(Topo):
         sh={}
         for e in l:
 	    print e
+	    #flag= 0 {same vm}, 1 {first node in other vm}, 2 {second node in other vm}
 	    flag=0
 	    
             if e[2]==vm:
-                print "okkkkk"
 		if e[0] not in sh:
                     if e[0] in mH:
                             host=self.addHost('h_%s' % (e[0]))
                             if dV[e[0]]==1:
-                            	switch=self.addSwitch('s_%s' % (e[0]))
-                            	self.addLink(switch,host)
+                            	s1=self.addSwitch('s_%s' % (e[0]))
+                            	self.addLink(s1,host)
                             	sh[e[0]]='s_'+str(e[0])
                     else:
                         #creation of non-malicious host->switch
-                        switch=self.addSwitch('s_%s' %(e[0]))
+                        s1=self.addSwitch('s_%s' %(e[0]))
                         sh[e[0]]='s_'+str(e[0])
-
+		
+			
             else:
                 flag=1
+                #s1=self.addSwitch('s_%s' %(e[0]))
+                sh[e[0]]='s_'+str(e[0])
                 vm2=e[2]
                     
             if e[3]==vm:
@@ -50,27 +53,27 @@ class allH1Topo(Topo):
                     if e[1] in mH:
 			    host=self.addHost('h_%s' % (e[1]))
                             #if dV[e[0]]==1:
-                            switch=self.addSwitch('s_%s' % (e[1]))
-                            self.addLink(switch,host)
+                            s2=self.addSwitch('s_%s' % (e[1]))
+                            self.addLink(s2,host)
                             sh[e[1]]='s_'+ str(e[1])
 		            #print str[e[1]]
 			    #else:
-
                     else:
                         #creation of non-malicious host->switch
-                        switch=self.addSwitch('s_%s' %(e[1]))
+                        s2=self.addSwitch('s_%s' %(e[1]))
                         sh[e[1]]='s_'+ str(e[1])
             else:
-                flag=1
+                flag=2
+                #s2=self.addSwitch('s_%s' %(e[1]))
+                sh[e[1]]='s_'+ str(e[1])
                 vm2=e[3]
 
             if flag==0:
-		#print sh[e[0]]
-		#print sh[e[1]]
                 self.addLink(sh[e[0]],sh[e[1]])
-            else:
-                switch.cmd('ovs-vsctl add-port switch vxlan%(number)s -- set interface vxlan%(number)s type=vxlan options:remote_ip=%(vm2)s options:key=%(number)s'% {"number":sh[e[0]]+sh[e[1]],"vm2":vm2})
-                
+	    elif flag==1:
+		vDict[sh[e[1]]]=[vm2,sh[e[0]]+sh[e[1]]]
+	    else:
+		vDict[sh[e[0]]]=[vm2,sh[e[0]]+sh[e[1]]]
         "switch = self.addSwitch('s1')"    
 """
 -Creates the custom topology allH1Topo
@@ -86,6 +89,12 @@ def Test(num):
     hosts=net.hosts
     switches=net.switches
     net.start()
+    for switch in switches:
+	if str(switch) in vDict:
+		switch.cmd('ovs-vsctl add-port switch vxlan%(number)s -- set interface vxlan%(number)s type=gre options:remote_ip=%(vm2)s options:key=%(number)s'% {"number":vDict[str(switch)][1],"vm2":vDict[str(switch)][0]})
+		print "olaaa"
+    		switch.cmdPrint('ovs-vsctl show')		
+    
     CLI(net)
     net.stop()
    
@@ -140,10 +149,14 @@ def Test(num):
 """
 if __name__=='__main__':
     l=[]
+    #input1=this vm's ip
+    #input2=edges/vms
+    flag=0
+    vDict={}
     vm=str(sys.argv[1])
     #print vm
     #edges=eval(open(sys.argv[2]))
-    mH=[702,1288]
+    mH=[701,7481]
     with open(sys.argv[2]) as f:
     	edges = [ast.literal_eval(line) for line in f]    
     dV={}
