@@ -159,7 +159,7 @@ if __name__=='__main__':
     vm=str(sys.argv[1])
     #print vm
     #edges=eval(open(sys.argv[2]))
-    mH=[5,10]
+    mH=[12288,701,9216,6147,8197,17409,9900,32778,24587,16397,10257,509]
     with open(sys.argv[2]) as f:
     	edges = [ast.literal_eval(line) for line in f]    
     dV={}
