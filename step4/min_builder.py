@@ -1,5 +1,4 @@
 #!/usr/bin/python  
-"""
 from mininet.topo import Topo
 from mininet.net import Mininet
 from mininet.cli import CLI
@@ -8,10 +7,12 @@ from mininet.link import TCLink
 from mininet.util import dumpNodeConnections
 from mininet.log import setLogLevel
 from mininet.topolib import TreeTopo
-"""
 import os
 import sys
 import time
+import json
+import ast 
+
 
 """Custom topology 
 
@@ -19,73 +20,86 @@ Building topology depending on edge-list
 
 """
 class allH1Topo(Topo):
-    "h1 connected with different switch to each host"
     def build(self,l):
         #dictionary for the names of the hosts&switches
         sh={}
+	n=0
         for e in l:
-            flag=0
+	    print e
+	    #flag= 0 {same vm}, 1 {first node in other vm}, 2 {second node in other vm}
+	    flag=0
+	    n+=1
             if e[2]==vm:
-                if e[0] not in s:
+		if e[0] not in sh:
                     if e[0] in mH:
-                            host=self.addHost('h_%s' % (e[0]))
-                            
-                        if dV[e[0]]==1:
-                            switch=self.addSwitch('s_%s' % (e[0]))
-                            self.addLink(switch,host)
-                            sh[e[0]]='s_%s'
+                            host=self.addHost('h_%s' % (e[0]),ip='10.0.0.%s'%(n))
+                            if dV[e[0]]==1:
+                            	s1=self.addSwitch('s_%s' % (e[0]))
+                            	self.addLink(s1,host)
+                            	sh[e[0]]='s_'+str(e[0])
                     else:
                         #creation of non-malicious host->switch
-                        switch=self.addSwitch('s_%s' %(e[0]))
-                        sh[e[0]]='s_%s'
-
+                        s1=self.addSwitch('s_%s' %(e[0]))
+                        sh[e[0]]='s_'+str(e[0])
+		
+			
             else:
                 flag=1
+                #s1=self.addSwitch('s_%s' %(e[0]))
+                sh[e[0]]='s_'+str(e[0])
                 vm2=e[2]
                     
             if e[3]==vm:
-                if e[1] not in s:
+                if e[1] not in sh:
                     if e[1] in mH:
-                            host=self.addHost('h_%s' % (e[1]))
-                            
-                        if dV[e[0]]==1:
-                            switch=self.addSwitch('s_%s' % (e[1]))
-                            self.addLink(switch,host)
-                            sh[e[1]]='s_%s'
+			    host=self.addHost('h_%s' % (e[1]))
+                            #if dV[e[0]]==1:
+                            s2=self.addSwitch('s_%s' % (e[1]))
+                            self.addLink(s2,host)
+                            sh[e[1]]='s_'+ str(e[1])
+		            #print str[e[1]]
+			    #else:
                     else:
                         #creation of non-malicious host->switch
-                        switch=self.addSwitch('s_%s' %(e[1]))
-                        sh[e[1]]='s_%s'
+                        s2=self.addSwitch('s_%s' %(e[1]))
+                        sh[e[1]]='s_'+ str(e[1])
             else:
-                flag=1
+                flag=2
+                #s2=self.addSwitch('s_%s' %(e[1]))
+                sh[e[1]]='s_'+ str(e[1])
                 vm2=e[3]
 
             if flag==0:
                 self.addLink(sh[e[0]],sh[e[1]])
-            else:
-                switch.cmd('ovs-vsctl add-port switch vxlan%(number)s -- set interface vxlan%(number)s type=vxlan options:remote_ip=%(vm2)s options:key=%(number)s'% {"number":sh[e[0]]+sh[e[1]],"vm2":vm2})
-                
+	    elif flag==1:
+		vDict[sh[e[1]]]=[vm2,sh[e[0]]+sh[e[1]]]
+	    else:
+		vDict[sh[e[0]]]=[vm2,sh[e[0]]+sh[e[1]]]
         "switch = self.addSwitch('s1')"    
-        
-        for i in range(n-1):
-            switch = self.addSwitch('s%s' % (i+2))
-            self.addLink(switch,'h%s' % (i+2))
-            self.addLink(switch,'h1')
 """
 -Creates the custom topology allH1Topo
 -h1 runs SimpleHTTPServer
 -All hosts run curl to h1 
 -results on output_script.pcap, outputcurl.txt
 """
-"""
-def HTTPTest(num):
-    vm2='192.168.56.102'
+
+def Test(num):
     "Create and test a simple network"
-    topo = allH1Topo(n=num)
+    topo = allH1Topo(l=num)
     net = Mininet(topo)
     hosts=net.hosts
     switches=net.switches
-    k=1
+    net.start()
+    for switch in switches:
+	if str(switch) in vDict:
+		switch.cmd('ovs-vsctl add-port switch vxlan%(number)s -- set interface vxlan%(number)s type=gre options:remote_ip=%(vm2)s options:key=%(number)s'% {"number":vDict[str(switch)][1],"vm2":vDict[str(switch)][0]})
+		print "olaaa"
+    		switch.cmdPrint('ovs-vsctl show')		
+    
+    CLI(net)
+    net.stop()
+   
+    """ 
     a={}
    
     "a[1]=h1, a[2]=h2..."
@@ -136,9 +150,16 @@ def HTTPTest(num):
 """
 if __name__=='__main__':
     l=[]
-    vm=sys.argv[1]
-    print vm
-    edges=open(sys.argv[2])
+    #input1=this vm's ip
+    #input2=edges/vms
+    flag=0
+    vDict={}
+    vm=str(sys.argv[1])
+    #print vm
+    #edges=eval(open(sys.argv[2]))
+    mH=[701,7481]
+    with open(sys.argv[2]) as f:
+    	edges = [ast.literal_eval(line) for line in f]    
     dV={}
     for e in edges:
         if vm in e:
@@ -152,5 +173,6 @@ if __name__=='__main__':
             else:
                 dV[e[1]]=1
             #print e
-    #setLogLevel('info')
-    #HTTPTest(num)
+    setLogLevel('info')
+    print l
+    Test(l)
