@@ -92,10 +92,12 @@ def Test(num):
     net.start()
     for switch in switches:
 	if str(switch) in vDict:
-		switch.cmd('ovs-vsctl add-port switch vxlan%(number)s -- set interface vxlan%(number)s type=gre options:remote_ip=%(vm2)s options:key=%(number)s'% {"number":vDict[str(switch)][1],"vm2":vDict[str(switch)][0]})
+		s=switch.name
+		switch.cmd('ovs-vsctl add-port %(switch)s vx%(number)s -- set interface vx%(number)s type=vxlan options:remote_ip=%(vm2)s options:key=%(number)s'% {"number":vDict[str(switch)][1],"vm2":vDict[str(switch)][0],"switch":s})
 		print "olaaa"
-    		switch.cmdPrint('ovs-vsctl show')		
     
+    		
+    switch.cmdPrint('ovs-vsctl show')		
     CLI(net)
     net.stop()
    
@@ -157,7 +159,7 @@ if __name__=='__main__':
     vm=str(sys.argv[1])
     #print vm
     #edges=eval(open(sys.argv[2]))
-    mH=[701,7481]
+    mH=[5,10]
     with open(sys.argv[2]) as f:
     	edges = [ast.literal_eval(line) for line in f]    
     dV={}
@@ -173,6 +175,6 @@ if __name__=='__main__':
             else:
                 dV[e[1]]=1
             #print e
-    setLogLevel('info')
+    setLogLevel('debug')
     print l
     Test(l)
