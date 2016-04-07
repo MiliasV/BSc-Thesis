@@ -51,7 +51,8 @@ class allH1Topo(Topo):
             if e[3]==vm:
                 if e[1] not in sh:
                     if e[1] in mH:
-			    host=self.addHost('h_%s' % (e[1]))
+			    #host=self.addHost('h_%s' % (e[1]))
+                            host=self.addHost('h_%s' % (e[1]),ip='10.0.%s.%s'%((e[1]&65280)>>8,e[1]&255))
                             #if dV[e[0]]==1:
                             s2=self.addSwitch('s_%s' % (e[1]))
                             self.addLink(s2,host)
@@ -87,6 +88,9 @@ def Test(num):
     topo = allH1Topo(l=num)
     net = Mininet(topo)
     hosts=net.hosts
+    for h in hosts:
+	if str(h)=='h_701':
+		h.cmdPrint('ifconfig')
     switches=net.switches
     net.start()
     for switch in switches:
@@ -126,6 +130,6 @@ if __name__=='__main__':
             else:
                 dV[e[1]]=1
             #print e
-    setLogLevel('info')
+    setLogLevel('debug')
     print l
     Test(l)
