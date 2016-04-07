@@ -16,7 +16,7 @@ env.hosts=['mininet@192.168.56.101','mininet@192.168.56.102']
 
 env.passwords = {'mininet@192.168.56.101:22': 'mininet', 'mininet@192.168.56.102:22': 'mininet'}
 
-ips=['192.168.56.101','192.100.56.102']
+ips=['192.168.56.101','192.168.56.102']
 
 
 def showOvs():
@@ -71,7 +71,7 @@ if __name__=='__main__':
     file = open("edges_mininet.txt",'w+')
     for item in l:
         print>>file, item
-    execute(connection)
+    #execute(connection)
     """
     print " "
     print '###############################'
