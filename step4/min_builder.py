@@ -97,7 +97,8 @@ def Test(num):
     
     		
     #switch.cmdPrint('ovs-vsctl show')		
-    CLI(net)
+    #CLI(net)
+    net.pingall()
     net.stop()
    
     """ 
