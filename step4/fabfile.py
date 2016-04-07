@@ -49,9 +49,11 @@ def connection():
         #put ('script.py','~/')
         #put ('list.txt','~/')
         #run('python script.py list.txt %s' %env.host)
+	run('mkdir testing')
+	run('cd testing')
         put('edges_mininet.txt','~/')
         put('min_builder.py','~/')
-        run('sudo python min_builder.py edges_mininet.txt %s' %env.host)
+        run('sudo python min_builder.py %s edges_mininet.txt ' %env.host)
         #with settings(warn_only=True):
             #run('nohup sudo python  adjToNetwork.py exam.csv ')
             #run('disown')
