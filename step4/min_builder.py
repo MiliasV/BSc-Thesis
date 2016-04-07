@@ -28,11 +28,10 @@ class allH1Topo(Topo):
 	    print e
 	    #flag= 0 {same vm}, 1 {first node in other vm}, 2 {second node in other vm}
 	    flag=0
-	    n+=1
             if e[2]==vm:
 		if e[0] not in sh:
                     if e[0] in mH:
-                            host=self.addHost('h_%s' % (e[0]),ip='10.0.0.%s'%(n))
+                            host=self.addHost('h_%s' % (e[0]),ip='10.0.%s.%s'%((e[0]&65280)>>8,e[0]&255))
                             if dV[e[0]]==1:
                             	s1=self.addSwitch('s_%s' % (e[0]))
                             	self.addLink(s1,host)
@@ -97,7 +96,7 @@ def Test(num):
 		print "olaaa"
     
     		
-    switch.cmdPrint('ovs-vsctl show')		
+    #switch.cmdPrint('ovs-vsctl show')		
     CLI(net)
     net.stop()
    
@@ -175,6 +174,6 @@ if __name__=='__main__':
             else:
                 dV[e[1]]=1
             #print e
-    setLogLevel('debug')
+    setLogLevel('info')
     print l
     Test(l)
