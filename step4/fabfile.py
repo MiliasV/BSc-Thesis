@@ -49,10 +49,12 @@ def connection():
         #put ('script.py','~/')
         #put ('list.txt','~/')
         #run('python script.py list.txt %s' %env.host)
-	run('mkdir testing')
+	run('sudo dhclient eth1')
+        run('sudo mn -c')
+        run('mkdir -p testing')
 	run('cd testing')
-        put('edges_mininet.txt','~/')
-        put('min_builder.py','~/')
+        put('edges_mininet.txt','~/testing/')
+        put('min_builder.py','~/testing/')
         run('sudo python min_builder.py %s edges_mininet.txt ' %env.host)
         #with settings(warn_only=True):
             #run('nohup sudo python  adjToNetwork.py exam.csv ')
@@ -71,9 +73,12 @@ if __name__=='__main__':
 
     l=[(edge[0],edge[1],e[edge[2]],e[edge[3]]) for edge in l] 
     file = open("edges_mininet.txt",'w+')
+    #file = open("10edges.txt",'w+')
     for item in l:
         print>>file, item
-    #execute(connection)
+    file.close()
+    f.close()
+    execute(connection)
     """
     print " "
     print '###############################'
