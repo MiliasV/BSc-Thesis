@@ -51,7 +51,8 @@ class allH1Topo(Topo):
             if e[3]==vm:
                 if e[1] not in sh:
                     if e[1] in mH:
-			    host=self.addHost('h_%s' % (e[1]))
+			    #host=self.addHost('h_%s' % (e[1]))
+                            host=self.addHost('h_%s' % (e[1]),ip='10.0.%s.%s'%((e[1]&65280)>>8,e[1]&255))
                             #if dV[e[0]]==1:
                             s2=self.addSwitch('s_%s' % (e[1]))
                             self.addLink(s2,host)
@@ -87,6 +88,9 @@ def Test(num):
     topo = allH1Topo(l=num)
     net = Mininet(topo)
     hosts=net.hosts
+    for h in hosts:
+	if str(h)=='h_701':
+		h.cmdPrint('ifconfig')
     switches=net.switches
     net.start()
     for switch in switches:
@@ -98,58 +102,9 @@ def Test(num):
     		
     #switch.cmdPrint('ovs-vsctl show')		
     #CLI(net)
-    net.pingall()
+    #net.pingAll()
     net.stop()
    
-    """ 
-    a={}
-   
-    "a[1]=h1, a[2]=h2..."
-    setLogLevel('debug')
-
-    for i in hosts:
-        if i==hosts[0]:
-            a[k]=i
-            for l in range(len(hosts)-1):
-                a[k].cmd('ifconfig h1-eth%(s1)s 10.0.%(s2)s.1/24' % {"s1":l ,"s2":l+2})
-        else:
-            a[k]=i
-            a[k].cmd('ifconfig h%(s1)s-eth0 10.0.%(s2)s.2/24' % {"s1":k ,"s2":k})
-        k+=1
-    net.start()
-    n=2
-    for switch in switches:
-        switch.cmd('ovs-vsctl add-port "s%(number)s" vxlan%(number)s -- set interface vxlan%(number)s type=vxlan options:remote_ip=%(vm2)s options:key=%(number)s'% {"number":n,"vm2":vm2})
-        n+=1
-    #print "Dumping host connections"
-    #dumpNodeConnections(net.hosts)
-    
-    "h1 cleans the files before anyone writes them"
-    a[1].cmd('rm -f outputcurl.txt')
-    a[1].cmd('rm -f output_script.pcap')
-    
-    "h1 starts an Http server and writes output to Http.txt"
-    
-    a[1].cmd('python -u -m SimpleHTTPServer 80 >> Http.txt &')
-    ">& /tmp/http.log &')"
-
-    "Waiting for Http Server to start"
-    time.sleep(4) 
-    
-    "h1 captures traffic "
-    a[1].cmd('tcpdump -i any -w output_script.pcap &')
-    
-    for l in range(2,k-1):
-        res=a[l].cmd('python curl_script.py 10.0.%s.1 &' %(l))
-    
-    res=a[k-1].sendCmd('python curl_script.py 10.0.%s.1 ' %(k-1))
-    a[k-1].waitOutput()
-    
-    #CLI(net)
-    net.stop()
-
-    
-"""
 if __name__=='__main__':
     l=[]
     #input1=this vm's ip
@@ -175,6 +130,6 @@ if __name__=='__main__':
             else:
                 dV[e[1]]=1
             #print e
-    setLogLevel('info')
+    setLogLevel('debug')
     print l
     Test(l)
