@@ -89,8 +89,7 @@ def Test(num):
     net = Mininet(topo)
     hosts=net.hosts
     for h in hosts:
-	if str(h)=='h_701':
-		h.cmdPrint('ifconfig')
+        h.cmdPrint('ping 10.0.2.189')
     switches=net.switches
     net.start()
     for switch in switches:
