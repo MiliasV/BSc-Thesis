@@ -52,10 +52,9 @@ def connection():
 	run('sudo dhclient eth1')
         run('sudo mn -c')
         run('mkdir -p testing')
-	run('cd testing')
         put('edges_mininet.txt','~/testing/')
         put('min_builder.py','~/testing/')
-        run('sudo python min_builder.py %s edges_mininet.txt ' %env.host)
+        run('cd testing && sudo python min_builder.py %s edges_mininet.txt ' %env.host)
         #with settings(warn_only=True):
             #run('nohup sudo python  adjToNetwork.py exam.csv ')
             #run('disown')
