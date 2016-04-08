@@ -23,7 +23,6 @@ class allH1Topo(Topo):
     def build(self,l):
         #dictionary for the names of the hosts&switches
         sh={}
-	n=0
         for e in l:
 	    print e
 	    #flag= 0 {same vm}, 1 {first node in other vm}, 2 {second node in other vm}
@@ -32,10 +31,10 @@ class allH1Topo(Topo):
 		if e[0] not in sh:
                     if e[0] in mH:
                             host=self.addHost('h_%s' % (e[0]),ip='10.0.%s.%s'%((e[0]&65280)>>8,e[0]&255))
-                            if dV[e[0]]==1:
-                            	s1=self.addSwitch('s_%s' % (e[0]))
-                            	self.addLink(s1,host)
-                            	sh[e[0]]='s_'+str(e[0])
+                            #if dV[e[0]]==1:
+                            s1=self.addSwitch('s_%s' % (e[0]))
+                            self.addLink(s1,host)
+                            sh[e[0]]='s_'+str(e[0])
                     else:
                         #creation of non-malicious host->switch
                         s1=self.addSwitch('s_%s' %(e[0]))
@@ -87,21 +86,21 @@ def Test(num):
     "Create and test a simple network"
     topo = allH1Topo(l=num)
     net = Mininet(topo)
-    hosts=net.hosts
-    for h in hosts:
-        h.cmdPrint('ping 10.0.2.189')
-    switches=net.switches
     net.start()
+    hosts=net.hosts
+    switches=net.switches
     for switch in switches:
 	if str(switch) in vDict:
 		s=switch.name
 		switch.cmd('ovs-vsctl add-port %(switch)s vx%(number)s -- set interface vx%(number)s type=vxlan options:remote_ip=%(vm2)s options:key=%(number)s'% {"number":vDict[str(switch)][1],"vm2":vDict[str(switch)][0],"switch":s})
 		print "olaaa"
     
+    for h in hosts:
+        h.cmdPrint('ping -c 10 10.0.2.189')
     		
     #switch.cmdPrint('ovs-vsctl show')		
     #CLI(net)
-    net.pingAll()
+    #net.pingAll()
     net.stop()
    
 if __name__=='__main__':
@@ -113,7 +112,7 @@ if __name__=='__main__':
     vm=str(sys.argv[1])
     #print vm
     #edges=eval(open(sys.argv[2]))
-    mH=[12288,701,9216,6147,8197,17409,9900,32778,24587,16397,10257,509]
+    mH=[12288,7473,702,701,9216,6147,8197,17409,9900,32778,24587,16397,10257,509]
     with open(sys.argv[2]) as f:
     	edges = [ast.literal_eval(line) for line in f]    
     dV={}
