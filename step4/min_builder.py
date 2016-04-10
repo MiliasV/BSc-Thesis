@@ -23,6 +23,7 @@ class allH1Topo(Topo):
     def build(self,l):
         #dictionary for the names of the hosts&switches
         sh={}
+        #switch = self.addSwitch('sVx00')    
         for e in l:
 	    print e
 	    #flag= 0 {same vm}, 1 {first node in other vm}, 2 {second node in other vm}
@@ -72,9 +73,10 @@ class allH1Topo(Topo):
                 self.addLink(sh[e[0]],sh[e[1]])
 	    elif flag==1:
 		vDict[sh[e[1]]]=[vm2,sh[e[0]]+sh[e[1]]]
+                #self.addLink(switch,sh[e[1]])
 	    else:
 		vDict[sh[e[0]]]=[vm2,sh[e[0]]+sh[e[1]]]
-        "switch = self.addSwitch('s1')"    
+                #self.addLink(switch,sh[e[0]])
 """
 -Creates the custom topology allH1Topo
 -h1 runs SimpleHTTPServer
@@ -92,16 +94,16 @@ def Test(num):
     for switch in switches:
 	if str(switch) in vDict:
 		s=switch.name
-		switch.cmd('ovs-vsctl add-port %(switch)s vx%(number)s -- set interface vx%(number)s type=vxlan options:remote_ip=%(vm2)s options:key=%(number)s'% {"number":vDict[str(switch)][1],"vm2":vDict[str(switch)][0],"switch":s})
+                switch.cmd('ovs-vsctl add-port %(switch)s vx%(number)s -- set interface vx%(number)s type=vxlan options:remote_ip=%(vm2)s options:key=%(number)s'% {"number":int(filter(str.isdigit,vDict[str(switch)][1])),"vm2":vDict[str(switch)][0],"switch":s})
 		print "olaaa"
     
     for h in hosts:
-        h.cmdPrint('ping -c 10 10.0.2.189')
+        h.cmdPrint('ping -c 3 10.0.2.189')
     		
     #switch.cmdPrint('ovs-vsctl show')		
     #CLI(net)
     #net.pingAll()
-    net.stop()
+    #net.stop()
    
 if __name__=='__main__':
     l=[]
