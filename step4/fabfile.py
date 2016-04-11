@@ -54,7 +54,7 @@ def connection():
         run('mkdir -p testing')
         put('edges_mininet.txt','~/testing/')
         put('min_builder.py','~/testing/')
-        run('cd testing && sudo python min_builder.py %s edges_mininet.txt ' %env.host)
+        run('cd testing && sudo python min_builder.py %s edges_mininet.txt ' %env.host , pty=False)
         #with settings(warn_only=True):
             #run('nohup sudo python  adjToNetwork.py exam.csv ')
             #run('disown')
