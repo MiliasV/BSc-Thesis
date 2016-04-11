@@ -72,10 +72,10 @@ class allH1Topo(Topo):
             if flag==0:
                 self.addLink(sh[e[0]],sh[e[1]])
 	    elif flag==1:
-		vDict[sh[e[1]]]=[vm2,sh[e[0]]+sh[e[1]]]
+		vDict[sh[e[1]]]=[vm2,sh[e[0]]+sh[e[1]],e[4]]
                 #self.addLink(switch,sh[e[1]])
 	    else:
-		vDict[sh[e[0]]]=[vm2,sh[e[0]]+sh[e[1]]]
+		vDict[sh[e[0]]]=[vm2,sh[e[0]]+sh[e[1]],e[4]]
                 #self.addLink(switch,sh[e[0]])
 """
 -Creates the custom topology allH1Topo
@@ -94,14 +94,15 @@ def Test(num):
     for switch in switches:
 	if str(switch) in vDict:
 		s=switch.name
-                switch.cmd('ovs-vsctl add-port %(switch)s vx%(number)s -- set interface vx%(number)s type=vxlan options:remote_ip=%(vm2)s options:key=%(number)s'% {"number":int(filter(str.isdigit,vDict[str(switch)][1])),"vm2":vDict[str(switch)][0],"switch":s})
+                switch.cmd('ovs-vsctl add-port %(switch)s vx%(number1)s -- set interface vx%(number1)s type=vxlan options:remote_ip=%(vm2)s options:key=%(number)s'% {"number":vDict[str(switch)][2],"number1":vDict[str(switch)][1], "vm2":vDict[str(switch)][0],"switch":s})
 		print "olaaa"
-    
+                #"number":int(filter(str.isdigit,vDict[str(switch)][1]))%100
     for h in hosts:
         h.cmdPrint('ping -c 3 10.0.2.189')
     		
     #switch.cmdPrint('ovs-vsctl show')		
-    #CLI(net)
+
+    CLI(net)
     #net.pingAll()
     #net.stop()
    
@@ -118,8 +119,13 @@ if __name__=='__main__':
     with open(sys.argv[2]) as f:
     	edges = [ast.literal_eval(line) for line in f]    
     dV={}
+    key={}
+    count=0
     for e in edges:
+        e= e + (count,)
+        count+=1
         if vm in e:
+            print key
             l.append(e)
             if e[0] in dV:
                 dV[e[0]]+=1
