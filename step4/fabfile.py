@@ -10,13 +10,18 @@ from ast  import literal_eval
 #env.password = 'byslaf366'
 #env.hosts=['mininet@192.168.56.102']
 #env.user = 'mininet'
-env.hosts=['mininet@192.168.56.101','mininet@192.168.56.102']
+env.disable_known_hosts=True
+env.warn_only=True
+env.hosts=['mininet@192.168.56.101','mininet@192.168.56.102','mininet@192.168.56.103']
+#env.hosts=['mininet@147.102.13.63','mininet@147.102.13.61','root@83.212.102.97']
 
 #env.hosts = ["mininet@192.168.56.101","mininet@192.168.56.102"]
 
-env.passwords = {'mininet@192.168.56.101:22': 'mininet', 'mininet@192.168.56.102:22': 'mininet'}
+env.passwords = {'mininet@192.168.56.101:22': 'mininet', 'mininet@192.168.56.102:22': 'mininet','mininet@192.168.56.103:22' : 'mininet'}
+#env.passwords = {'mininet@147.102.13.63:22': 'mininet', 'mininet@147.102.13.61:22': 'mininet','root@83.212.102.97:22' : 'byslaf366'}
 
-ips=['192.168.56.101','192.168.56.102']
+ips=['192.168.56.101','192.168.56.102','192.168.56.103']
+#ips=['147.102.13.63','147.102.13.61','83.212.102.97']
 
 
 def showOvs():
@@ -54,7 +59,9 @@ def connection():
         run('mkdir -p testing')
         put('edges_mininet.txt','~/testing/')
         put('min_builder.py','~/testing/')
-        run('cd testing && sudo python min_builder.py %s edges_mininet.txt ' %env.host , pty=False)
+        put('allMh.txt','~/testing/')
+        print '############################ %s ################'%env.host
+        run('cd testing && sudo python min_builder.py %s edges_mininet.txt allMh.txt' %env.host , pty=False)
         #with settings(warn_only=True):
             #run('nohup sudo python  adjToNetwork.py exam.csv ')
             #run('disown')
