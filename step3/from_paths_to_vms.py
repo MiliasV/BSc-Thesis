@@ -75,7 +75,7 @@ if __name__=='__main__':
     
     #print paths 
     G=nx.Graph()
-    print len(paths)
+    #print len(paths)
     G=from_paths_to_graph(paths)
     
     #if ( (len(G.nodes())/nPv+1)>V ):
@@ -87,8 +87,8 @@ if __name__=='__main__':
     #print len(G.nodes())
     
     l = list_of_vms(G,parts)
-    #print l
-     
+    print l
+ 
     #Graphic representation
     count=0
     colors = ['darkkhaki','darkorange','darkslategray2','darkviolet','dimgrey','khaki','lightcoral','lightpink4','red','blue','green','yellow','antiquewhite4','brown','cyan','violet','firebrick3','pink','black','purple']
@@ -97,8 +97,8 @@ if __name__=='__main__':
         count+=1
     
     #pos=nx.circular_layout(G)
-    nx.write_dot(G,'random_400.dot')
+    nx.write_dot(G,'100_3_edges.dot')
     #os.system("dot -Tpng 10circlegraph.dot -o 10circlegraph.png")
     #os.system("open graph.ps")
-
+    
     #print time.time()-start_time
