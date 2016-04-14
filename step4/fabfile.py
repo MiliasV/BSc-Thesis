@@ -67,11 +67,15 @@ def connection():
             #run('disown')
 
 if __name__=='__main__':
-    
-    f=open(sys.argv[1])
-    line=f.readline()
+   
+    f=str(sys.argv[1])
+    num=int(sys.argv[2])
+    os.system("python from_paths_to_vms.py %(file)s %(number)s" %{"file":f, "number":num})
+    f1=open("new_edges.txt",'r')
+    #f1=open(sys.argv[3])
+    line=f1.readline()
     l=literal_eval(line)[:]
-    #print l
+    print l
     e={}
     count=0
     for i in range(len(ips)):
@@ -79,11 +83,10 @@ if __name__=='__main__':
 
     l=[(edge[0],edge[1],e[edge[2]],e[edge[3]]) for edge in l] 
     file = open("edges_mininet.txt",'w+')
-    #file = open("10edges.txt",'w+')
     for item in l:
         print>>file, item
     file.close()
-    f.close()
+    f1.close()
     execute(connection)
     """
     print " "

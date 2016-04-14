@@ -141,6 +141,7 @@ if __name__=='__main__':
     #input2=edges/vms
     flag=0
     vDict={}
+    os.system("from_paths_to_vm.py ")
     vm=str(sys.argv[1])
     #print vm
     #edges=eval(open(sys.argv[2]))
