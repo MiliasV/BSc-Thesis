@@ -127,13 +127,13 @@ def Test(num):
 			print "olaaa"
                 #"number":int(filter(str.isdigit,vDict[str(switch)][1]))%100
     for h in hosts:
-        h.cmdPrint('ping -c 3 10.0.2.189')
+        h.cmdPrint('ping -c 20 10.0.2.189')
     		
     #switch.cmdPrint('ovs-vsctl show')		
 
     CLI(net)
     #net.pingAll()
-    #net.stop()
+    net.stop()
    
 if __name__=='__main__':
     l=[]

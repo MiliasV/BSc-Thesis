@@ -6,22 +6,25 @@ import sys
 import os
 from ast  import literal_eval
 #env.hosts = ['snf-680603.vm.okeanos.grnet.gr']
-#env.user = 'root'
+#env.user = 'mininet'
 #env.password = 'byslaf366'
 #env.hosts=['mininet@192.168.56.102']
 #env.user = 'mininet'
 env.disable_known_hosts=True
 env.warn_only=True
-env.hosts=['mininet@192.168.56.101','mininet@192.168.56.102','mininet@192.168.56.103']
-#env.hosts=['mininet@147.102.13.63','mininet@147.102.13.61','root@83.212.102.97']
+#env.hosts=['mininet@192.168.56.102','mininet@192.168.56.101','mininet@83.212.102.97']
+env.hosts=['mininet@147.102.13.69','mininet@83.212.102.97','mininet@147.102.13.61']
 
-#env.hosts = ["mininet@192.168.56.101","mininet@192.168.56.102"]
+#env.hosts = ["mininet@83.212.102.97","mininet@147.102.13.61","mininet@192.168.56.103"]
 
-env.passwords = {'mininet@192.168.56.101:22': 'mininet', 'mininet@192.168.56.102:22': 'mininet','mininet@192.168.56.103:22' : 'mininet'}
-#env.passwords = {'mininet@147.102.13.63:22': 'mininet', 'mininet@147.102.13.61:22': 'mininet','root@83.212.102.97:22' : 'byslaf366'}
+#env.passwords = {'mininet@192.168.56.101:22': 'mininet', 'mininet@192.168.56.102:22': 'mininet','mininet@192.168.56.103:22' : 'mininet','mininet@83.212.102.97:22': 'byslaf366'}
+env.passwords = {'mininet@83.212.102.97:22': 'byslaf366', 'mininet@147.102.13.61:22': 'mininet','mininet@147.102.13.69:22' : 'mininet'}
 
-ips=['192.168.56.101','192.168.56.102','192.168.56.103']
-#ips=['147.102.13.63','147.102.13.61','83.212.102.97']
+#ips=['83.212.102.97','192.168.56.102','192.168.56.101']
+ips=['83.212.102.97','147.102.13.61','147.102.13.69']
+     
+#'83.212.102.97',
+     
 
 
 def showOvs():
@@ -54,7 +57,7 @@ def connection():
         #put ('script.py','~/')
         #put ('list.txt','~/')
         #run('python script.py list.txt %s' %env.host)
-	run('sudo dhclient eth1')
+	#run('sudo dhclient eth1')
         run('sudo mn -c')
         run('mkdir -p testing')
         put('edges_mininet.txt','~/testing/')
