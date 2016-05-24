@@ -73,8 +73,8 @@ class allH1Topo(Topo):
                 self.addLink(sh[e[0]],sh[e[1]])
 	    elif flag==2:
                 if sh[e[0]] not in vDict:
-		    	print '23456$#@!@#$*^&%#^$@%$!@#&$^$@%#!$@@#&$^@%#$!'
-			print sh[e[0]]
+		    	#print '23456$#@!@#$*^&%#^$@%$!@#&$^$@%#!$@@#&$^@%#$!'
+			#print sh[e[0]]
 			vDict[sh[e[0]]]=[[vm2],[sh[e[0]]+sh[e[1]]],[e[4]],1]
                 else:
                     vDict[sh[e[0]]][1].append(sh[e[0]]+sh[e[1]])
@@ -119,16 +119,25 @@ def Test(num):
                     switch.cmd('ovs-vsctl add-port %(switch)s vx%(number1)s -- set interface vx%(number1)s type=vxlan options:remote_ip=%(vm2)s options:key=%(number)s'% {"number":vDict[str(switch)][2][0],"number1":vDict[str(switch)][1][0], "vm2":vDict[str(switch)][0][0],"switch":s})
 		else:		
                     for i in range(len(vDict[str(switch)][1])):
-                    	print '##########################'
-		    	print s
-		        print i
-                    	print '##########################'
+                    	#print '##########################'
+		    	#print s
+		        #print i
+                    	#print '##########################'
                     	switch.cmd('ovs-vsctl add-port %(switch)s vx%(number1)s -- set interface vx%(number1)s type=vxlan options:remote_ip=%(vm2)s options:key=%(number)s'% {"number":vDict[str(switch)][2][i],"number1":vDict[str(switch)][1][i], "vm2":vDict[str(switch)][0][i],"switch":s})
-			print "olaaa"
+			#print "olaaa"
                 #"number":int(filter(str.isdigit,vDict[str(switch)][1]))%100
+    
     for h in hosts:
-        h.cmdPrint('ping -c 20 10.0.2.189')
-    		
+        if h.name=='h_701':
+            h.cmdPrint('iperf -s  >iperf_30_5Vms.txt -t 500 -i 120   &')
+            #h.cmd('iperf -s  -i 2 -t 120  &')
+            print "#################################################################################"
+            print "#################################################################################"
+            #h.cmd('tcpdump -U -i any -w output_100_120s.pcap &')
+        else:   
+            #h.cmd("ping 10.0.2.189 -c 3")
+            h.cmdPrint('iperf -c 10.0.2.189 -t 120 -M 1400 &  ')
+       
     #switch.cmdPrint('ovs-vsctl show')		
 
     CLI(net)
@@ -141,7 +150,7 @@ if __name__=='__main__':
     #input2=edges/vms
     flag=0
     vDict={}
-    os.system("from_paths_to_vm.py ")
+    #os.system("from_paths_to_vm.py ")
     vm=str(sys.argv[1])
     #print vm
     #edges=eval(open(sys.argv[2]))
@@ -149,7 +158,7 @@ if __name__=='__main__':
     with open(sys.argv[3]) as f:                                               
         mH=f.read().splitlines()                                               
     mH.remove('None')                                                         
-    mH=map(int,mH) 
+    mH=map(int,mH)
     with open(sys.argv[2]) as f:
     	edges = [ast.literal_eval(line) for line in f]    
     dV={}
@@ -159,7 +168,7 @@ if __name__=='__main__':
         e= e + (count,)
         count+=1
         if vm in e:
-            print key
+            #print key
             l.append(e)
             if e[0] in dV:
                 dV[e[0]]+=1
@@ -170,6 +179,6 @@ if __name__=='__main__':
             else:
                 dV[e[1]]=1
             #print e
-    setLogLevel('debug')
-    print l
+    setLogLevel('info')
+    #print l
     Test(l)
