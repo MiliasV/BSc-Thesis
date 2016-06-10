@@ -72,32 +72,43 @@ if __name__=='__main__':
     start_time=time.time()
     paths=readmyfile(sys.argv[1])
     V=int(sys.argv[2])
-    
+    with open(sys.argv[3]) as f:                                               
+        mH=f.read().splitlines()                                               
+        mH.remove('None')                                                          
+        mH=map(int,mH)
     #print paths 
     G=nx.Graph()
     #print len(paths)
     G=from_paths_to_graph(paths)
-    
-    #if ( (len(G.nodes())/nPv+1)>V ):
-    #   print "#####You have to define a different number of nodes/Vm because you have not enouph Vms.You need %s more Vms"%(len(G.nodes())/nPv+1-V) 
-    
     (edgecuts,parts)=metis.part_graph(G,V)
+    #print '#############################################################'
+    #print nx.average_shortest_path_length(G,weight=None)
     #print edgecuts
     #print parts
     #print len(G.nodes())
-    
+    file=open("new_edges.txt",'w+')
     l = list_of_vms(G,parts)
-    print l
+    print >> file,l
+    #for item in l:
+        #print>>file, item
+    file.close()
+    #print l
  
     #Graphic representation
     count=0
-    colors = ['darkkhaki','darkorange','darkslategray2','darkviolet','dimgrey','khaki','lightcoral','lightpink4','red','blue','green','yellow','antiquewhite4','brown','cyan','violet','firebrick3','pink','black','purple']
+    colors = ['darkkhaki','darkorange','darkslategray2','darkviolet','dimgrey','khaki','lightcoral','lightpink4','blue','green','yellow','antiquewhite4','brown','cyan','violet','firebrick3','pink','black','purple']
     for n in G.nodes():
         G.node[n]['color']=colors[parts[count]]
         count+=1
-    
+        print G.node[n]
+        if n in mH:
+            G.node[n]['color']='red'
+
+     
     #pos=nx.circular_layout(G)
-    nx.write_dot(G,'100_3_edges.dot')
+    nx.write_dot(G,'new_edges.dot')
+    os.system("sed -i -e 's/--/->/g' new_edges.dot")
+    os.system("python dottoxml.py new_edges.dot new_edges.graphml")
     #os.system("dot -Tpng 10circlegraph.dot -o 10circlegraph.png")
     #os.system("open graph.ps")
     
