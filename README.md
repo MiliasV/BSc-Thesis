@@ -1,19 +1,26 @@
 # Project-D
-Diplomatiki
+
+# Thesis title: DDoS emulation via dataset-extracted attack graphs mapped on cloud infrastructure.
+
+The scope of this thesis was the development of a tool for the emulation of Distributed Denial of Service attacks (DDoS). Theoretically, this project can be divided into two basic sectors:
+
+- The building, visualization and partitioning of large DDoS attack graphs
+
+- The creation of a tool for the emulation of large DDoS attacks. 
+
+For this purpose, this tool has the ability to connect with multiple VMs from different cloud infrastructures (NTUA, okeanos, GENI etc), share subgraphs with them, command them to emulate the subgraphs via mininet emulator (one subgraph per VM) and connect the differnent VMs so that finally the initial large topology has been emulated.
 
 
-STEPS
+# Code Description
 
- (1) 
-ip_to_as.py
+# ip_to_as.py
   
   Script that prints the match between Ips and Ases from those that are included in the dataset of 
   the Ddos attack of 2007 (August) (CAIDA dataset) so that we can build this specific tree of attack.
   For this goal we used a file that has the ips-asn mapping that existed in 01 August 2007  (from Delft university)
   (The files with the data are missing from Github because they are too large)
 
-(2)
-tree_of_attack.py
+# tree_of_attack.py
 
 This script takes as input a dataset that contains as relatonships with the form:
 
@@ -24,8 +31,7 @@ we have define inside the script.
 
 It returns the paths of the tree.
 
-(3)
-from_paths_to_vms.py
+# from_paths_to_vms.py
 
   This script takes as input: file with the paths (list of lists) 
                             number of Vms (V)
@@ -36,12 +42,10 @@ from_paths_to_vms.py
   edge between them
   
 
-  NEXT STEP
 
-  -Make a script that takes as input a list of Vms and builds the overall topology by running a mininet script
-  with the right arguments in each of the Vms.
+  Needs to be added => description of the script that takes as input a list of Vms and builds the overall topology by running a mininet script with the right arguments in each of the Vms.
   
-Sequence:  
+# Sequence:  
 
 1 -> Turn the ips of the attack into ases
 
