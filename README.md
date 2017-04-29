@@ -13,6 +13,7 @@ For this purpose, this tool has the ability to connect with multiple VMs from di
 
 ![project_image.png](1000_AS_20_clusters.png)
 
+* Example figure: 1000 autonomous systems - 20 clusters. Each color represent a different cloud infrastructure which was responsible for the building of those AS-nodes.  In the middle the AS which contains the victim. *
 
 # Code Description
 
