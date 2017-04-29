@@ -11,6 +11,9 @@ The scope of this thesis was the development of a tool for the emulation of Dist
 For this purpose, this tool has the ability to connect with multiple VMs from different cloud infrastructures (NTUA, okeanos, GENI etc), share subgraphs with them, command them to emulate the subgraphs via mininet emulator (one subgraph per VM) and connect the differnent VMs so that finally the initial large topology has been emulated.
 
 
+![project_image.png](as_cluster_graph.png)
+
+
 # Code Description
 
 # ip_to_as.py
